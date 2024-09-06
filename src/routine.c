@@ -6,7 +6,7 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 12:21:31 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/09/06 15:51:28 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/09/06 17:53:17 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,19 @@ void	*philo_routine(void *i)
 	philo = (t_philo *)i;
 	if (philo->id % 2 == 0)
 		usleep(10);
-	while (philo->data->death == 0)
+	while (1)
 	{
+		pthread_mutex_lock(&philo->data->killer);
+		if (philo->data->death == 1)
+		{
+			pthread_mutex_unlock(&philo->data->killer);
+			break ;
+		}
+		pthread_mutex_unlock(&philo->data->killer);
 		pthread_mutex_lock(&philo->fork_l);
 		ft_message(philo, 0);
 		pthread_mutex_lock(&philo->fork_r);
 		ft_message(philo, 0);
-		philo->time_death = philo->data->time_die;
 		ft_message(philo, 1);
 		philo->times_eaten++;
 		philo->last_eat = ft_get_time() - philo->data->start;
@@ -81,21 +87,23 @@ void	*philo_routine(void *i)
 
 void	ft_create_philo(t_data *data)
 {
+	int	i;
+
+	i = 0;
 	data->start = ft_get_time();
-	data->i = 0;
 	pthread_create(&data->monitor, NULL, &ft_monitoring, (void *)data);
-	while (data->i < data->philo_nb)
+	while (i < data->philo_nb)
 	{
-		if (pthread_create(&data->philosophers[data->i].thread, NULL, &philo_routine, (void *)&data->philosophers[data->i]) != 0)
-			ft_puterrorstr("Error: Failed to create philosopher\n", data);
-		data->i++;
+		pthread_create(&data->philosophers[i].thread, NULL,
+			&philo_routine, (void *)&data->philosophers[i]);
+		i++;
 	}
-	data->i = 0;
+	i = 0;
 	pthread_join(data->monitor, NULL);
-	while (data->i < data->philo_nb)
+	while (i < data->philo_nb)
 	{
-		if (pthread_join(data->philosophers[data->i].thread, NULL) != 0)
-			ft_puterrorstr("Error: Failed to join philosopher\n", data);
-		data->i++;
+		printf("%d\n", i);
+		pthread_join(data->philosophers[i].thread, NULL);
+		i++;
 	}
 }

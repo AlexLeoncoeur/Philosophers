@@ -6,7 +6,7 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 12:31:59 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/09/06 14:06:01 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/09/06 17:44:55 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_philo
 	pthread_mutex_t	fork_l;
 	pthread_mutex_t	fork_r;
 	pthread_mutex_t	*messenger;
+	pthread_mutex_t	*killer;
 	t_data			*data;
 	int				id;
 	int				times_eaten;
@@ -51,6 +52,7 @@ typedef struct s_data
 	t_philo				*philosophers;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		messenger;
+	pthread_mutex_t		killer;
 	pthread_t			monitor;
 	int					death;
 	int					start;

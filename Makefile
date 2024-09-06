@@ -64,9 +64,9 @@ $(BONUS_OBJ_DIR)order_cmd/%.o: $(BONUS_ORDER_SRC_DIR)%.c
 #---------- FLAGS & COMPILATION ----------#
 
 CC = clang
-NAME = philosophers
+NAME = philo
 BONUS_NAME = checker_bonus
-CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g -pthread
+CFLAGS = -Wall -Werror -Wextra -g -pthread -fsanitize=address
 
 all: $(NAME)
 $(NAME): compiling $(OFILES) $(ORDER_OFILES)

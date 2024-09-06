@@ -6,36 +6,36 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 12:30:24 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/09/06 14:51:02 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/09/06 17:48:56 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void	*ft_monitoring(void *i)
+void	*ft_monitoring(void *x)
 {
 	t_data	*data;
 	int		philos_sick;
+	int		i;
 
 	philos_sick = 0;
-	data = (t_data *)i;
-	data->i = 0;
+	data = (t_data *)x;
+	i = 0;
 	while (philos_sick != data->philo_nb)
 	{
-		if (data->i == data->philo_nb)
-			data->i = 0;
-		//printf("times_eaten: %d\n", data->philosophers[data->i].times_eaten);
-		//printf("must_eat: %d\n", data->must_eat);
-		if (data->philosophers[data->i].times_eaten == data->must_eat)
+		if (i == data->philo_nb - 1)
+			i = 0;
+		if (data->philosophers[i].times_eaten == data->must_eat)
 			philos_sick++;
-		else if (((ft_get_time() - data->start) - data->philosophers[data->i].last_eat) >= data->time_die)
+		else if (((ft_get_time() - data->start) - data->philosophers[i].last_eat) >= data->time_die)
 		{
+			pthread_mutex_lock(&data->killer);
 			data->death = 1;
-			ft_message(&data->philosophers[data->i], 4);
+			pthread_mutex_unlock(&data->killer);
+			ft_message(&data->philosophers[i], 4);
 			break ;
 		}
-		//printf("philos_sick: %d\n", philos_sick);
-		data->i++;
+		i++;
 	}
 	return (data->death = 1, NULL);
 }
@@ -49,6 +49,7 @@ static void	ft_init_mutex(t_data *data)
 		data->i++;
 	}
 	pthread_mutex_init(&data->messenger, NULL);
+	pthread_mutex_init(&data->killer, NULL);
 }
 
 static void	ft_init_philo(t_data *data)
@@ -62,6 +63,7 @@ static void	ft_init_philo(t_data *data)
 		data->philosophers[data->i].last_eat = 0;
 		data->philosophers[data->i].time_death = data->time_die;
 		data->philosophers[data->i].messenger = &data->messenger;
+		data->philosophers[data->i].killer = &data->killer;
 		data->philosophers[data->i].data = data;
 		data->philosophers[data->i].id = data->i;
 		data->philosophers[data->i].fork_l = data->forks[data->i % 5];
@@ -91,6 +93,7 @@ static void	ft_prepare_struct(int argc, char **argv, t_data *data)
 	data->death = 0;
 	data->philosophers = philosophers;
 	data->forks = forks;
+	pthread_mutex_init(&data->killer, NULL);
 	ft_init_mutex(data);
 	ft_init_philo(data);
 }
