@@ -13,7 +13,7 @@ RED		= \033[31;1m
 #---------- BASE ----------#
 
 # FILES 
-CFILES = philo.c check_argv.c error.c routine.c\
+CFILES = philo.c check_argv.c error.c routine.c routine_utils.c actions.c\
 
 ORDER_CFILES = 
 
@@ -66,7 +66,7 @@ $(BONUS_OBJ_DIR)order_cmd/%.o: $(BONUS_ORDER_SRC_DIR)%.c
 CC = clang
 NAME = philo
 BONUS_NAME = checker_bonus
-CFLAGS = -Wall -Werror -Wextra -g -pthread -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra -pthread -fsanitize=address -g
 
 all: $(NAME)
 $(NAME): compiling $(OFILES) $(ORDER_OFILES)

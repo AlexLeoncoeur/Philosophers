@@ -6,7 +6,7 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:51:05 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/09/06 14:25:31 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/09/09 16:42:01 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ void	ft_free_all(t_data *data)
 	while (data->i < data->philo_nb)
 		pthread_mutex_destroy(&data->forks[data->i++]);
 	free(data->forks);
-	//pthread_mutex_destroy(&data->messenger);
 	free(data->philosophers);
-	/* ft_free_data(data->philosophers); */
 	free(data);
 }
 

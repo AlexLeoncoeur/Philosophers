@@ -6,7 +6,7 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 12:31:59 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/09/06 17:44:55 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/09/09 17:26:12 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,11 @@ typedef struct s_data	t_data;
 typedef struct s_philo
 {
 	pthread_t		thread;
-	pthread_mutex_t	fork_l;
-	pthread_mutex_t	fork_r;
+	pthread_mutex_t	*fork_l;
+	pthread_mutex_t	*fork_r;
 	pthread_mutex_t	*messenger;
 	pthread_mutex_t	*killer;
+	pthread_mutex_t	*time;
 	t_data			*data;
 	int				id;
 	int				times_eaten;
@@ -53,6 +54,7 @@ typedef struct s_data
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		messenger;
 	pthread_mutex_t		killer;
+	pthread_mutex_t		time;
 	pthread_t			monitor;
 	int					death;
 	int					start;
@@ -82,8 +84,19 @@ void	ft_create_philo(t_data *data);
 void	ft_sleep(int time);
 int		ft_get_time(void);
 
+/*-------------------------- routine_utils.c --------------------------*/
+
+void	ft_lonely_philo(t_philo *philo);
+void	ft_set_death_true(t_data *data);
+void	ft_take_fork(t_philo *philo);
+
+/*------------------------------ actions.c ------------------------------*/
+
+void	ft_sleep_action(t_philo *philo);
+void	ft_think(t_philo *philo);
+void	ft_eat(t_philo *philo);
+
 /*------------------------------ error.c ------------------------------*/
 
 void	ft_puterrorstr(char *str, t_data *data);
 void	ft_free_all(t_data *data);
-void	ft_finish(t_data *data);

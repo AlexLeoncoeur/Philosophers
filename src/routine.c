@@ -6,7 +6,7 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 12:21:31 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/09/06 17:53:17 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/09/09 17:26:30 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,29 @@ void	ft_sleep(int time)
 
 void	ft_message(t_philo *philo, int x)
 {
+	int	i;
+
+	pthread_mutex_lock(philo->killer);
 	if (philo->data->death == 1)
+	{
+		pthread_mutex_unlock(philo->killer);
 		return ;
+	}
+	pthread_mutex_unlock(philo->killer);
 	pthread_mutex_lock(philo->messenger);
-	if (x == 0)
-		printf("%s %d Philosopher took a fork!\n%s", G, philo->id, RST);
-	else if (x == 1)
-		printf("%s %d Philosopher is eating!\n%s", B, philo->id, RST);
-	else if (x == 2)
-		printf("%s %d Philosopher is sleeping!\n%s", Y, philo->id, RST);
-	else if (x == 3)
-		printf("%s %d Philosopher is thinking!\n%s", M, philo->id, RST);
-	else if (x == 4)
-		printf("%s %d Philosopher is dead!\n%s", RED, philo->id, RST);
+	i = ft_get_time() - philo->data->start;
+	pthread_mutex_lock(philo->killer);
+	if (x == 0 && philo->data->death != 1)
+		printf("%s%d %d has taken a fork\n%s", G, i, philo->id, RST);
+	else if (x == 1 && philo->data->death != 1)
+		printf("%s%d %d is eating\n%s", B, i, philo->id, RST);
+	else if (x == 2 && philo->data->death != 1)
+		printf("%s%d %d is sleeping\n%s", Y, i, philo->id, RST);
+	else if (x == 3 && philo->data->death != 1)
+		printf("%s%d %d is thinking\n%s", M, i, philo->id, RST);
+	else if (x == 4 && philo->data->death != 1)
+		printf("%s%d %d died\n%s", RED, i, philo->id, RST);
+	pthread_mutex_unlock(philo->killer);
 	pthread_mutex_unlock(philo->messenger);
 }
 
@@ -57,10 +67,10 @@ void	*philo_routine(void *i)
 	t_philo	*philo;
 
 	philo = (t_philo *)i;
-	if (philo->id % 2 == 0)
-		usleep(10);
 	while (1)
 	{
+		if (philo->data->philo_nb == 1)
+			ft_lonely_philo(philo);
 		pthread_mutex_lock(&philo->data->killer);
 		if (philo->data->death == 1)
 		{
@@ -68,19 +78,9 @@ void	*philo_routine(void *i)
 			break ;
 		}
 		pthread_mutex_unlock(&philo->data->killer);
-		pthread_mutex_lock(&philo->fork_l);
-		ft_message(philo, 0);
-		pthread_mutex_lock(&philo->fork_r);
-		ft_message(philo, 0);
-		ft_message(philo, 1);
-		philo->times_eaten++;
-		philo->last_eat = ft_get_time() - philo->data->start;
-		ft_sleep(philo->data->time_eat);
-		pthread_mutex_unlock(&philo->fork_l);
-		pthread_mutex_unlock(&philo->fork_r);
-		ft_message(philo, 2);
-		ft_sleep(philo->data->time_sleep);
-		ft_message(philo, 3);
+		ft_think(philo);
+		ft_eat(philo);
+		ft_sleep_action(philo);
 	}
 	return (NULL);
 }
@@ -102,7 +102,6 @@ void	ft_create_philo(t_data *data)
 	pthread_join(data->monitor, NULL);
 	while (i < data->philo_nb)
 	{
-		printf("%d\n", i);
 		pthread_join(data->philosophers[i].thread, NULL);
 		i++;
 	}
