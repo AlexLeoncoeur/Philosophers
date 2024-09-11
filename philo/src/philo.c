@@ -6,7 +6,7 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 12:30:24 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/09/09 17:13:21 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/09/11 12:57:41 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	*ft_monitoring(void *x)
 		if (data->philosophers[i].times_eaten == data->must_eat)
 			philos_sick++;
 		else if (((ft_get_time() - data->start)
-				- data->philosophers[i].last_eat) >= data->time_die)
+				- data->philosophers[i].last_eat) > data->time_die)
 		{
 			pthread_mutex_unlock(&data->time);
 			ft_message(&data->philosophers[i], 4);

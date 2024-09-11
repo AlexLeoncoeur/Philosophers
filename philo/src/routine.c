@@ -6,7 +6,7 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 12:21:31 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/09/09 17:26:30 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/09/11 13:00:12 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,11 @@
 
 void	ft_sleep(int time)
 {
-	int	x;
+	int	initial_time;
 
-	x = ft_get_time();
-	while (1)
-	{
-		if (ft_get_time() - x >= time)
-			break ;
+	initial_time = ft_get_time();
+	while (ft_get_time() - initial_time < time)
 		usleep(10);
-	}
 }
 
 void	ft_message(t_philo *philo, int x)
@@ -67,10 +63,16 @@ void	*philo_routine(void *i)
 	t_philo	*philo;
 
 	philo = (t_philo *)i;
+	if (!(philo->id % 2))
+		ft_sleep(100);
 	while (1)
 	{
 		if (philo->data->philo_nb == 1)
+		{
 			ft_lonely_philo(philo);
+			break ;
+		}
+		ft_eat(philo);
 		pthread_mutex_lock(&philo->data->killer);
 		if (philo->data->death == 1)
 		{
@@ -78,9 +80,8 @@ void	*philo_routine(void *i)
 			break ;
 		}
 		pthread_mutex_unlock(&philo->data->killer);
-		ft_think(philo);
-		ft_eat(philo);
 		ft_sleep_action(philo);
+		ft_think(philo);
 	}
 	return (NULL);
 }
