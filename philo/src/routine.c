@@ -6,7 +6,7 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 12:21:31 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/09/12 13:32:26 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/09/12 18:50:27 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_sleep(int time)
 
 	initial_time = ft_get_time();
 	while ((ft_get_time() - initial_time) < time)
-		usleep(10);
+		usleep(1);
 }
 
 void	ft_message(t_philo *philo, int x)
