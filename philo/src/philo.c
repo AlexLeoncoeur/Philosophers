@@ -6,7 +6,7 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 12:30:24 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/09/11 12:57:41 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:31:58 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,22 @@ void	*ft_monitoring(void *x)
 
 	philos_sick = 0;
 	data = (t_data *)x;
+	data->start = ft_get_time();
 	i = 0;
-	while (philos_sick != data->philo_nb && i++ != -1)
+	while (philos_sick <= data->philo_nb && i++ != -1)
 	{
 		if (i >= data->philo_nb - 1)
 			i = 0;
 		pthread_mutex_lock(&data->time);
 		if (data->philosophers[i].times_eaten == data->must_eat)
 			philos_sick++;
-		else if (((ft_get_time() - data->start)
-				- data->philosophers[i].last_eat) > data->time_die)
+		if (((ft_get_time() - data->start)
+				- data->philosophers[i].last_eat) >= data->time_die)
 		{
 			pthread_mutex_unlock(&data->time);
 			ft_message(&data->philosophers[i], 4);
 			ft_set_death_true(data);
-			break ;
+			return (NULL);
 		}
 		pthread_mutex_unlock(&data->time);
 	}
@@ -49,8 +50,8 @@ static void	ft_init_mutex(t_data *data)
 		pthread_mutex_init(&data->forks[data->i], NULL);
 		data->i++;
 	}
-	pthread_mutex_init(&data->messenger, NULL);
 	pthread_mutex_init(&data->killer, NULL);
+	pthread_mutex_init(&data->messenger, NULL);
 	pthread_mutex_init(&data->time, NULL);
 }
 
@@ -99,7 +100,6 @@ static void	ft_prepare_struct(int argc, char **argv, t_data *data)
 	data->death = 0;
 	data->philosophers = philosophers;
 	data->forks = forks;
-	pthread_mutex_init(&data->killer, NULL);
 	ft_init_mutex(data);
 	ft_init_philo(data);
 }

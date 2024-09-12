@@ -6,7 +6,7 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 17:17:10 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/09/11 12:49:29 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/09/12 11:54:21 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 void	ft_think(t_philo *philo)
 {
 	ft_message(philo, 3);
+	if (philo->id % 2)
+		ft_sleep(10);
 }
 
 void	ft_eat(t_philo *philo)

@@ -6,7 +6,7 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 12:31:59 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/09/09 17:26:12 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/09/12 11:30:55 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int		ft_get_time(void);
 void	ft_lonely_philo(t_philo *philo);
 void	ft_set_death_true(t_data *data);
 void	ft_take_fork(t_philo *philo);
+int		ft_get_death(t_data *data);
 
 /*------------------------------ actions.c ------------------------------*/
 
