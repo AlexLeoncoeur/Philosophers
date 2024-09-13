@@ -6,7 +6,7 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 12:30:24 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/09/12 13:31:58 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/09/13 11:56:14 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,17 @@
 void	*ft_monitoring(void *x)
 {
 	t_data	*data;
-	int		philos_sick;
 	int		i;
 
-	philos_sick = 0;
 	data = (t_data *)x;
-	data->start = ft_get_time();
 	i = 0;
-	while (philos_sick <= data->philo_nb && i++ != -1)
+	while (data->philos_sick <= data->philo_nb && i++ != -1)
 	{
 		if (i >= data->philo_nb - 1)
 			i = 0;
 		pthread_mutex_lock(&data->time);
 		if (data->philosophers[i].times_eaten == data->must_eat)
-			philos_sick++;
+			data->philos_sick++;
 		if (((ft_get_time() - data->start)
 				- data->philosophers[i].last_eat) >= data->time_die)
 		{
@@ -97,6 +94,7 @@ static void	ft_prepare_struct(int argc, char **argv, t_data *data)
 	data->must_eat = -1;
 	if (argv[5])
 		data->must_eat = ft_atoi(argv[5]);
+	data->philos_sick = 0;
 	data->death = 0;
 	data->philosophers = philosophers;
 	data->forks = forks;

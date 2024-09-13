@@ -6,7 +6,7 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 12:31:59 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/09/12 11:30:55 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/09/13 11:44:01 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_data
 	pthread_mutex_t		killer;
 	pthread_mutex_t		time;
 	pthread_t			monitor;
+	int					philos_sick;
 	int					death;
 	int					start;
 	int					argc;

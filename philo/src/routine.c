@@ -6,7 +6,7 @@
 /*   By: aarenas- <aarenas-@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 12:21:31 by aarenas-          #+#    #+#             */
-/*   Updated: 2024/09/12 18:50:27 by aarenas-         ###   ########.fr       */
+/*   Updated: 2024/09/13 11:56:24 by aarenas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	ft_create_philo(t_data *data)
 	int	i;
 
 	i = 0;
+	data->start = ft_get_time();
 	pthread_create(&data->monitor, NULL, &ft_monitoring, (void *)data);
 	while (i < data->philo_nb)
 	{
